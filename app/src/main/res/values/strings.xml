@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">MultisensorApp</string>
+    <string name="Multisensor">Multisensor</string>
+    <string name="start">Start</string>
+    <string name="about">About</string>
+    <string name="dashboard">Dashboard</string>
+    <string name="devices">Devices</string>
+    <string name="Menu">Menu</string>
+    <string name="dark_mode">Dark Mode</string>
+</resources>
