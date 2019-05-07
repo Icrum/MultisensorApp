@@ -31,7 +31,7 @@ public class VolleyHelper {
                     e.printStackTrace();
                     JSONObject jsonObject = new JSONObject();
                     try {
-                        jsonObject.put("status","error");
+                        jsonObject.put("data","error");
                         listener.onSuccess(jsonObject);
                     } catch (JSONException e1) {
                         e1.printStackTrace();
@@ -43,7 +43,7 @@ public class VolleyHelper {
             public void onErrorResponse(VolleyError error) {
                 JSONObject jsonObject = new JSONObject();
                 try {
-                    jsonObject.put("status","error");
+                    jsonObject.put("data","error");
                     listener.onSuccess(jsonObject);
                 } catch (JSONException e1) {
                     e1.printStackTrace();
