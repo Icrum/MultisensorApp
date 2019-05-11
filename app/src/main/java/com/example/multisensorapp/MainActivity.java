@@ -9,10 +9,17 @@ import android.support.v7.app.AppCompatDelegate;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.Switch;
+import android.widget.Toast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
-    Button buttonStart;
+    Button buttonLogin;
+    EditText editTextEmail;
+    EditText editTextPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,17 +27,44 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        buttonStart = (Button)findViewById(R.id.buttonStart);
-        buttonStart.setOnClickListener(new View.OnClickListener() {
+        editTextEmail = findViewById(R.id.editTextEmail);
+        editTextPassword = findViewById(R.id.editTextPassword);
+        buttonLogin = (Button)findViewById(R.id.buttonLogin);
+        buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openMenu();
+                login();
             }
         });
     }
 
-    public void openMenu() {
-        Intent intent = new Intent(this, Menu.class);
-        startActivity(intent);
+    public void login() {
+        VolleyHelper.userLogin(
+                this,
+                editTextEmail.getText().toString(),
+                editTextPassword.getText().toString(),
+                new VolleyHelper.OnResponseListener() {
+                    @Override
+                    public void onSuccess(JSONObject jsonObject) {
+                        // Testar os vários tipos de resposta
+                        if (jsonObject.has("status")){
+                            try {
+                                if (jsonObject.getString("status").contains("error")){
+                                    Toast.makeText(MainActivity.this,"No internet connection",Toast.LENGTH_LONG).show();
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                Toast.makeText(MainActivity.this,"No internet connection",Toast.LENGTH_LONG).show();
+                            }
+                        }else if (jsonObject.has("id")){
+                            // Guardar dados do utilisador
+                            Intent intent = new Intent(MainActivity.this, Menu.class);
+                            startActivity(intent);
+                        }else {
+                            Toast.makeText(MainActivity.this,"No user name or password",Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+
     }
 }
