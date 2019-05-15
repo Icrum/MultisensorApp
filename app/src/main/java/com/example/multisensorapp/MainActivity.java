@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void login() {
+        Log.d(MainActivity.TAG, "LOGIN");
         VolleyHelper.userLogin(
                 this,
                 editTextEmail.getText().toString(),
@@ -51,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(JSONObject jsonObject) {
                         // Testar os vários tipos de resposta
+                        Log.d(MainActivity.TAG, "chegou aqui.."+jsonObject.toString());
                         if (jsonObject.has("status")){
                             try {
                                 if (jsonObject.getString("status").contains("error")){
