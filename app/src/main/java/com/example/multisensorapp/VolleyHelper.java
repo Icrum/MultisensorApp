@@ -89,6 +89,7 @@ public class VolleyHelper {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                Log.d(MainActivity.TAG, "VolleyError error"+error.toString());
                 listener.onSuccess(getJsonError("error"));
             }
 
