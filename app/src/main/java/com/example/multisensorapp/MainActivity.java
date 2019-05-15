@@ -6,6 +6,7 @@ import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatDelegate;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -17,6 +18,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
+
+    public static String TAG = "multisensorapp";
+
     Button buttonLogin;
     EditText editTextEmail;
     EditText editTextPassword;
@@ -53,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
                                     Toast.makeText(MainActivity.this,"No internet connection",Toast.LENGTH_LONG).show();
                                 }
                             } catch (JSONException e) {
-                                e.printStackTrace();
+                                Log.d(MainActivity.TAG, e.toString());
                                 Toast.makeText(MainActivity.this,"No internet connection",Toast.LENGTH_LONG).show();
                             }
                         }else if (jsonObject.has("id")){

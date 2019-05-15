@@ -22,7 +22,7 @@ import java.text.ParseException;
 
 public class VolleyHelper {
 
-    public static String BASE_API = "https://192.168.41.68:4000";
+    public static String BASE_API = "http://192.168.41.68:4000";
 
     public interface OnResponseListener {
         void onSuccess(JSONObject jsonObject);
@@ -33,7 +33,7 @@ public class VolleyHelper {
         try {
             jsonObject.put("status",error);
         } catch (JSONException e1) {
-            e1.printStackTrace();
+            Log.d(MainActivity.TAG, e1.toString());
         }
 
         return jsonObject;
@@ -48,7 +48,7 @@ public class VolleyHelper {
                     JSONObject jsonObject= new JSONObject(response);
                     listener.onSuccess(jsonObject);
                 } catch (JSONException e) {
-                    e.printStackTrace();
+                    Log.d(MainActivity.TAG, e.toString());
                     listener.onSuccess(getJsonError("error"));
                 }
             }
@@ -75,7 +75,7 @@ public class VolleyHelper {
             obj.put("password", password);
 
         } catch (JSONException e) {
-            e.printStackTrace();
+            Log.d(MainActivity.TAG, e.toString());
         }
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, BASE_API + "/api/users/sign_in", obj, new Response.Listener<JSONObject>() {
