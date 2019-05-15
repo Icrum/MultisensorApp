@@ -22,7 +22,7 @@ import java.text.ParseException;
 
 public class VolleyHelper {
 
-    public static String BASE_API = "192.168.41.68:4000";
+    public static String BASE_API = "https://192.168.41.68:4000";
 
     public interface OnResponseListener {
         void onSuccess(JSONObject jsonObject);
