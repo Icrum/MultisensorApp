@@ -79,7 +79,9 @@ public class VolleyHelper {
             Log.d(MainActivity.TAG, e.toString());
         }
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, BASE_API + "/api/users/sign_in", obj, new Response.Listener<JSONObject>() {
+        Log.d(MainActivity.TAG, "json login"+obj.toString());
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, BASE_API + "/api/users/sign_in/", obj, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 listener.onSuccess(response);
