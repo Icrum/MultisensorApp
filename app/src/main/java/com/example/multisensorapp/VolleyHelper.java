@@ -22,6 +22,7 @@ import java.text.ParseException;
 
 public class VolleyHelper {
 
+    private static final int TIMEOUT = 5000;
     public static String BASE_API = "http://192.168.41.68:4000";
 
     public interface OnResponseListener {
@@ -91,9 +92,9 @@ public class VolleyHelper {
 
         });
 
-        //jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(TIMEOUT,
-        //        DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-        //        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(TIMEOUT,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         queue.add(jsonObjectRequest);
     }
 
