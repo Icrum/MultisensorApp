@@ -2,6 +2,7 @@ package com.example.multisensorapp;
 
 import android.content.Intent;
 import android.location.SettingInjectorService;
+import android.os.StrictMode;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -31,6 +32,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        if (android.os.Build.VERSION.SDK_INT > 15)
+        {
+            StrictMode.ThreadPolicy policy = new
+                    StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+        }
+
         editTextEmail = findViewById(R.id.editTextEmail);
         editTextPassword = findViewById(R.id.editTextPassword);
         buttonLogin = (Button)findViewById(R.id.buttonLogin);
@@ -40,11 +48,14 @@ public class MainActivity extends AppCompatActivity {
                 login();
             }
         });
+
+        editTextEmail.setText("asd@asd.com");
+        editTextPassword.setText("qwerty");
     }
 
     public void login() {
         Log.d(MainActivity.TAG, "LOGIN");
-        VolleyHelper.userLogin(
+        VolleyHelper.getInstance(this).userLogin(
                 this,
                 editTextEmail.getText().toString(),
                 editTextPassword.getText().toString(),
@@ -62,8 +73,18 @@ public class MainActivity extends AppCompatActivity {
                                 Log.d(MainActivity.TAG, e.toString());
                                 Toast.makeText(MainActivity.this,"No internet connection",Toast.LENGTH_LONG).show();
                             }
-                        }else if (jsonObject.has("id")){
+                        }else if (jsonObject.has("data")){
                             // Guardar dados do utilizador
+                            try {
+                                JSONObject data = (JSONObject) jsonObject.get("data");
+                                JSONObject user = (JSONObject) data.get("user");
+                                int id = user.getInt("id");
+                                String email = user.getString("email");
+                                Singleton.getInstance().setEmail(email);
+                                Singleton.getInstance().setId(id);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
                             Intent intent = new Intent(MainActivity.this, Menu.class);
                             startActivity(intent);
                         }else {

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.provider.Settings;
 import android.util.Log;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -19,11 +20,29 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.ParseException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class VolleyHelper {
 
+    private static VolleyHelper instance = null;
+
+
+    RequestQueue queue;
+    protected VolleyHelper(Context context){
+        queue= Volley.newRequestQueue(context);
+    }
+
+    public static VolleyHelper getInstance(Context context){
+        if (instance == null){
+            instance = new VolleyHelper(context);
+        }
+        return instance;
+    }
+
+
     private static final int TIMEOUT = 5000;
-    public static String BASE_API = "http://192.168.41.68:4000";
+    public static String BASE_API = "http://192.168.41.86:4000";
 
     public interface OnResponseListener {
         void onSuccess(JSONObject jsonObject);
@@ -40,8 +59,8 @@ public class VolleyHelper {
         return jsonObject;
     }
 
-    public static void getAllData(Context context, String url, final OnResponseListener listener){
-        RequestQueue queue= Volley.newRequestQueue(context);
+    public  void getAllData(Context context, String url, final OnResponseListener listener){
+
         StringRequest request=new StringRequest(url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -56,17 +75,15 @@ public class VolleyHelper {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                JSONObject jsonObject = new JSONObject();
-                listener.onSuccess(getJsonError("error"));
+                Log.d(MainActivity.TAG, "Get Data:" + error.toString());
+                listener.onSuccess(getJsonError(error.toString()));
             }
         });
 
         queue.add(request);
     }
 
-    public static void userLogin (final Context context, final String username, String password, final OnResponseListener listener){
-
-        RequestQueue queue = Volley.newRequestQueue(context);
+    public  void userLogin (final Context context, final String username, String password, final OnResponseListener listener){
 
         JSONObject obj = null;
 
@@ -80,25 +97,30 @@ public class VolleyHelper {
         }
 
         Log.d(MainActivity.TAG, "json login"+obj.toString());
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, BASE_API + "/api/users/sign_in/", obj, new Response.Listener<JSONObject>() {
+        String url = BASE_API + "/api/users/sign_in/";
+        Log.d(MainActivity.TAG, url);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, obj, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 listener.onSuccess(response);
             }
+
+
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.d(MainActivity.TAG, "VolleyError error"+error.toString());
-                listener.onSuccess(getJsonError("error"));
+                Log.d(MainActivity.TAG, "Login:" +error.toString());
+                listener.onSuccess(getJsonError(error.toString()));
             }
 
         });
-
+/*
         jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(TIMEOUT,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));*/
         queue.add(jsonObjectRequest);
     }
+
+
 
 }
