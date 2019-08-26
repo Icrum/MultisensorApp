@@ -28,6 +28,10 @@ public class VolleyHelper {
     private static VolleyHelper instance = null;
 
 
+    private static final String SET_COOKIE_KEY = "Set-Cookie";
+    private static final String COOKIE_KEY = "Cookie";
+    private static final String SESSION_COOKIE = "sessionid";
+
     RequestQueue queue;
     protected VolleyHelper(Context context){
         queue= Volley.newRequestQueue(context);
@@ -99,9 +103,13 @@ public class VolleyHelper {
         Log.d(MainActivity.TAG, "json login"+obj.toString());
         String url = BASE_API + "/api/users/sign_in/";
         Log.d(MainActivity.TAG, url);
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, obj, new Response.Listener<JSONObject>() {
+        JsonObjectRequest jsonObjectRequest = new MyJsonObjectRequest(Request.Method.POST, url, obj, new Response.Listener<JSONObject>() {
+
+
             @Override
             public void onResponse(JSONObject response) {
+
+                Log.d("MultiSensorApp", Singleton.getInstance().getToken());
                 listener.onSuccess(response);
             }
 
