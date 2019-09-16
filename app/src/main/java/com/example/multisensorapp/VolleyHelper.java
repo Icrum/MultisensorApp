@@ -63,9 +63,9 @@ public class VolleyHelper {
         return jsonObject;
     }
 
-    public  void getAllData(Context context, String url, final OnResponseListener listener){
+    public  void getAllData(Context context, final String url, final OnResponseListener listener){
 
-        StringRequest request=new StringRequest(url, new Response.Listener<String>() {
+        StringRequest request=new MyStringRequest(url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
@@ -103,7 +103,10 @@ public class VolleyHelper {
         Log.d(MainActivity.TAG, "json login"+obj.toString());
         String url = BASE_API + "/api/users/sign_in/";
         Log.d(MainActivity.TAG, url);
-        JsonObjectRequest jsonObjectRequest = new MyJsonObjectRequest(Request.Method.POST, url, obj, new Response.Listener<JSONObject>() {
+
+        //JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, obj, new Response.Listener<JSONObject>() {
+
+       JsonObjectRequest jsonObjectRequest = new MyJsonObjectRequest(Request.Method.POST, url, obj, new Response.Listener<JSONObject>() {
 
 
             @Override
@@ -128,6 +131,9 @@ public class VolleyHelper {
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));*/
         queue.add(jsonObjectRequest);
     }
+
+
+
 
 
 
